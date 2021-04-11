@@ -2,54 +2,71 @@ var canvas = document.getElementById("canvas");
 canvas.width = 300;
 canvas.height = 300;
 
+var determinant = function(mat,n){//might experiment with sparse array in the future
+    if(n === 1)return mat[0];
+    var det = 0;
+    var kk = 1;
+    var mat2 = new Array((n-1)*(n-1));
+    var mat2len = mat2.length;
+    var bound = (n-1)*(n-1);
+    for(var i = 0; i < n; i++){
+        //yes!! float64array to the rescue!
+        var jj = 0;
+        for(var j = 0; j < n; j++){//horizontal (x)
+            if(j === i)continue;
+            for(var k = 1; k < n; k++){//vertical (y)
+                if((k-1)*(n-1)+jj >= bound || (k-1)*(n-1)+jj < 0)console.log("asdfasdf");
+                mat2[(k-1)*(n-1)+jj] = mat[k*n+j];
+            }
+            jj++;
+        }
+        det += mat[i]*kk*determinant(mat2,n-1);
+        kk *= -1;
+    }
+    if(mat2len !== mat2.length){
+        console.log("ourof bound");
+    }
+    return det;
+};
 
-var getLeftCandidate = function(origin,e0){
-    var edges = origin.edges;
-    var dest = e0.verts[origin.id];
-    var originAngle = Math.atan(dest.y-origin.y, dest.x-origin.x);
-    //first sort by angle
+
+var isInside = function(a,b,c,   d){
+    
 }
 
 
-var getLeftCandidate = function(origin,e0){
-    //first sort it by angle
+var getLeftCandidate = function(field,origin,e0){
     var edges = origin.edges;
-    var dest = e0.verts[1];
-    if(e0.verts[1] === origin){
-        dest = e0.verts[0];
-    }
+    var dest = e0.verts[origin.id];
     var originAngle = Math.atan(dest.y-origin.y, dest.x-origin.x);
     
-    
+    //first sort by angle
     var es = [];
     for(var i in edges){
         var e = edges[i];
         if(e === e0)continue;//same edge, isnt worth checking
-        es.push(e);
-        var v1 = e.verts[0];
-        var v2 = e.verts[1];
-        if(v1 === origin){
-            var temp = v1;
-            v1 = v2;
-            v2 = temp;//now v2 is the destination
-        }
-        var dx = v2.x - v1.x;
-        var dy = v2.y - v1.y;
-        e.angle = (Math.atan2(dy,dx)-originAngle+2*Math.PI)%(2*Math.PI);
+        var v2 = e.verts[origin.id];
+        e.angle = (Math.atan(v2.y-origin.y, v2.x-origin.x)-originAngle+Math.PI*2)%Math.PI*2;
+        if(e.angle < Math.PI)es.push(e);
     }
+    if(es.length === 0)return false;
     es.sort((a,b)=>{//angle from small to big
         return a.angle-b.angle;//angle from small to big
     });
-    for(var i = 0; i < es.length; i++){
-        var edge = es[i];
-        var vert = edge.verts[1];
-        if(edge.verts[1] === origin){
-            vert = edge.verts[0];
+    for(var i = 0; i < es.length-1; i++){
+        var cand1 = es[i].verts[origin.id];
+        var cand2 = es[i+1].verts[origin.id];
+        //if cand2 is inside the cand1 circle go on
+        if(!isInside(origin,dest,cand1,   cand2)){//if cnad2 is inside all that
+            //remove the edge
+            field.removeEdge(ed[i]);
+        }else{
+            return cand1;
         }
-        //now vert is the candidate
     }
-    
+    return es[es.length-1].verts[origin.id];
 };
+
 
 
 
