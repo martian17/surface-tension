@@ -425,7 +425,7 @@ var main = async function(){
             waterMoleculeSimulation(field);
         }
         var radius = calcXDiameter(field,ridx)/2;
-        var pi = ((width-(2+1/2)*nl)*(height-(2+1/2)*nl))/radius/radius;
+        var pi = ((width-(2+1/3)*nl)*(height-(2+1/3)*nl))/radius/radius;
         document.getElementById("display").innerHTML = "π = "+pi;
         field.render();
     }
