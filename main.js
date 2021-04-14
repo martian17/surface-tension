@@ -398,7 +398,7 @@ var main = async function(){
     var r = false;
     for(var i in verts){
         var v = verts[i];
-        if(v.x < 0 || v.y < 0 || v.x > width || v.y > height){
+        if(v.x < 0+nl || v.y < 0+nl || v.x > width-nl || v.y > height-nl){
             var edges = v.edges;
             var remove = true;
             for(var j in edges){
@@ -407,9 +407,9 @@ var main = async function(){
                     remove = false;
                 }
             }
-            if(remove || Math.random() > 0.2){
+            //if(remove || Math.random() > 0.3){
                 field.removeVert(v);
-            }
+            //}
         }else{
             ridx = v.id;
         }
@@ -425,7 +425,7 @@ var main = async function(){
             waterMoleculeSimulation(field);
         }
         var radius = calcXDiameter(field,ridx)/2;
-        var pi = width*height/radius/radius;
+        var pi = ((width-(2+1/2)*nl)*(height-(2+1/2)*nl))/radius/radius;
         document.getElementById("display").innerHTML = "π = "+pi;
         field.render();
     }
