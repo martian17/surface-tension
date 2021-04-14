@@ -7,7 +7,7 @@ var Field = function(canvas){
     this.verts = verts;
     this.edges = edges;
     var that = this;
-    this.r = 5;
+    this.r = 3;
     
     var idd = 0;
     var genid = function(){
@@ -59,7 +59,7 @@ var Field = function(canvas){
             ctx.fillStyle = v.color || "#000";
             ctx.fill();
             //drawing the number
-            ctx.strokeText(v.id,v.x+5,v.y-5);
+            //ctx.strokeText(v.id,v.x+5,v.y-5);
         }
         for(var i in edges){
             var e = edges[i];
