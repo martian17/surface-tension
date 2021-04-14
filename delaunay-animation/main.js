@@ -73,6 +73,7 @@ var getLeftCandidate = async function(field,origin,e0){
         es[i].verts[origin.id].color = "#0f0";
         field.render();
         field.ctx.fillText(es[i].angle,es[i].verts[origin.id].x,es[i].verts[origin.id].y);
+        await pause(1);
         es[i].verts[origin.id].color = "#000";
     }
     for(var i = 0; i < es.length-1; i++){
@@ -120,6 +121,7 @@ var getRightCandidate = async function(field,origin,e0){
         es[i].verts[origin.id].color = "#0f0";
         field.render();
         field.ctx.fillText(es[i].angle,es[i].verts[origin.id].x,es[i].verts[origin.id].y);
+        await pause(1);
         es[i].verts[origin.id].color = "#000";
     }
     for(var i = 0; i < es.length-1; i++){
@@ -272,6 +274,7 @@ var divideAndConquer = async function(field,arr){
             }
         }
         field.render();
+        await pause(1);
         return ymin;
     }else{
         var middle = Math.floor(arr.length/2);
@@ -283,6 +286,7 @@ var divideAndConquer = async function(field,arr){
         var ymin = leftPivot.y < rightPivot.y ? leftPivot : rightPivot;
         //merging
         while(true){
+            await pause(1);
             var e = field.addEdge(leftPivot,rightPivot);
             leftPivot.color = "#f00";
             rightPivot.color = "#f00";
@@ -344,6 +348,9 @@ field.addVert(493.0871408195855,299.995660743562);
 field.addVert(174.05583583535721,59.01190928082014);
 */
 
+
+const recorder = new CanvasRecorder(canvas);
+recorder.start();
 generatetriangulation(field);
 
 field.render();
